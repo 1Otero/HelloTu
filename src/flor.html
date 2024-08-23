@@ -1,0 +1,108 @@
+<div id="rose-container">
+  <svg viewBox="0 0 100 100" width="200" height="200">
+    <g id="rose">
+      <!-- Tallo estático con hojas -->
+      <line x1="50" y1="70" x2="50" y2="100" stroke="green" stroke-width="2" />
+      <path d="M50 85 Q40 80 45 70" fill="green" />
+      <path d="M50 80 Q60 75 55 65" fill="green" />
+      
+      <!-- Capullo y pétalos -->
+      <g id="flower" transform="translate(0, -30)">
+        <!-- Capullo base -->
+        <path d="M50 70 C45 70 45 60 50 60 C55 60 55 70 50 70" fill="#ff69b4" />
+        
+        <!-- Pétalos que se abrirán -->
+        <g id="petals">
+          <path d="M50 70 C30 70 30 40 50 40 C70 40 70 70 50 70" fill="#ff69b4" />
+          <path d="M50 70 C35 70 35 45 50 45 C65 45 65 70 50 70" fill="#ff1493" />
+        </g>
+        
+        <!-- Pétalos adicionales -->
+        <path id="petal-1" d="M40 55 Q50 25 60 55" fill="#ff69b4" opacity="0" />
+        <path id="petal-2" d="M30 60 Q50 30 70 60" fill="#ff1493" opacity="0" />
+      </g>
+    </g>
+  </svg>
+</div>
+
+<style>
+#rose-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+#flower {
+  transform-origin: center bottom;
+}
+
+#petals {
+  transform-origin: center bottom;
+  transform: scaleY(0);
+}
+
+#petal-1, #petal-2 {
+  transform-origin: bottom center;
+}
+
+@keyframes open-petals {
+  0% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes close-petals {
+  0% { transform: scaleY(1); }
+  100% { transform: scaleY(0); }
+}
+
+@keyframes show-extra-petals {
+  0% { opacity: 0; transform: scaleY(0); }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes hide-extra-petals {
+  0% { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(0); }
+}
+
+@keyframes flower-sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(5deg); }
+}
+</style>
+
+<script>
+const flower = document.getElementById('flower');
+const petals = document.getElementById('petals');
+const petal1 = document.getElementById('petal-1');
+const petal2 = document.getElementById('petal-2');
+
+function openRose() {
+  flower.style.animation = 'flower-sway 5s ease-in-out infinite';
+  petals.style.animation = 'open-petals 3s forwards';
+  setTimeout(() => {
+    petal1.style.animation = 'show-extra-petals 2s forwards';
+    setTimeout(() => {
+      petal2.style.animation = 'show-extra-petals 2s forwards';
+    }, 1000);
+  }, 1500);
+  setTimeout(closeRose, 8000);
+}
+
+function closeRose() {
+  petal2.style.animation = 'hide-extra-petals 2s forwards';
+  setTimeout(() => {
+    petal1.style.animation = 'hide-extra-petals 2s forwards';
+  }, 1000);
+  setTimeout(() => {
+    petals.style.animation = 'close-petals 3s forwards';
+    setTimeout(() => {
+      flower.style.animation = 'none';
+    }, 3000);
+  }, 2000);
+  setTimeout(openRose, 10000);
+}
+
+openRose(); // Start the animation cycle
+</script>
